@@ -12,12 +12,19 @@ project(
 
 include(cmake/project-is-top-level.cmake)
 include(cmake/variables.cmake)
+include(${CMAKE_SOURCE_DIR}/cmake/CPM.cmake)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+#
+CPMAddPackage(crow_auth
+        GIT_TAG main
+        GITHUB_REPOSITORY gittiver/crow-auth
+)
 # ---- Declare library ----
 
 add_library(
     asc-game-server_lib OBJECT
-    source/lib.cpp
+        src/lib.cpp
 )
 
 target_include_directories(
@@ -30,14 +37,14 @@ target_compile_features(asc-game-server_lib PUBLIC cxx_std_20)
 
 # ---- Declare executable ----
 
-add_executable(asc-game-server_exe source/main.cpp)
+add_executable(asc-game-server_exe src/main.cpp)
 add_executable(asc-game-server::exe ALIAS asc-game-server_exe)
 
 set_property(TARGET asc-game-server_exe PROPERTY OUTPUT_NAME asc-game-server)
 
 target_compile_features(asc-game-server_exe PRIVATE cxx_std_20)
 
-target_link_libraries(asc-game-server_exe PRIVATE asc-game-server_lib)
+target_link_libraries(asc-game-server_exe PRIVATE asc-game-server_lib  lib-crow-auth Crow::Crow)
 
 # ---- Install rules ----
 

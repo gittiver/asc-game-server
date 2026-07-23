@@ -20,11 +20,12 @@ CPMAddPackage(crow_auth
         GIT_TAG main
         GITHUB_REPOSITORY gittiver/crow-auth
 )
+
 # ---- Declare library ----
 
 add_library(
     asc-game-server_lib OBJECT
-        src/lib.cpp
+        src/asc_server.cpp
 )
 
 target_include_directories(
@@ -42,9 +43,10 @@ add_executable(asc-game-server::exe ALIAS asc-game-server_exe)
 
 set_property(TARGET asc-game-server_exe PROPERTY OUTPUT_NAME asc-game-server)
 
+target_include_directories(asc-game-server_exe PRIVATE lib-crow-auth)
 target_compile_features(asc-game-server_exe PRIVATE cxx_std_20)
 
-target_link_libraries(asc-game-server_exe PRIVATE asc-game-server_lib  lib-crow-auth Crow::Crow)
+target_link_libraries(asc-game-server_exe PRIVATE asc-game-server_lib lib-crow-auth Crow::Crow)
 
 # ---- Install rules ----
 

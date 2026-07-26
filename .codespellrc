@@ -4,3 +4,7 @@ check-filenames =
 check-hidden =
 skip = */.git,*/build,*/prefix
 quiet-level = 2
+
+# Comma separated list of words to be ignored. Words must be lowercased.
+ignore-words-list = uint
+

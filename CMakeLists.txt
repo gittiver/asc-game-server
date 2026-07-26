@@ -10,6 +10,11 @@ project(
     LANGUAGES CXX
 )
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+# Set required C++ standard
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+
 include(cmake/project-is-top-level.cmake)
 include(cmake/variables.cmake)
 include(${CMAKE_SOURCE_DIR}/cmake/CPM.cmake)

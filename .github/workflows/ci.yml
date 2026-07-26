@@ -10,7 +10,23 @@ on:
     - main
 
 jobs:
+  install_dependencies:
+    strategy:
+      matrix:
+        os: [macos-14, ubuntu-22.04, windows-2022]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Install dependencies
+      if: matrix.os == 'ubuntu-22.04'
+      run: >- 
+        sudo apt-get update -q
+        && sudo apt-get install libasio-dev -q -y
+
+
   lint:
+    needs: [install_dependencies]
     runs-on: ubuntu-22.04
 
     steps:
@@ -38,8 +54,7 @@ jobs:
     # edit the "<name>" placeholder to your GitHub name.
     # If you do not wish to use codecov, then simply delete this job from the
     # workflow.
-    if: github.repository_owner == '<name>'
-      && false
+    if: github.repository_owner == 'gittiver'
 
     steps:
     - uses: actions/checkout@v4
@@ -154,10 +169,9 @@ jobs:
     # this comment and the last line in the conditional below.
     # If you do not wish to use GitHub Pages for deploying documentation, then
     # simply delete this job similarly to the coverage one.
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
       && github.event_name == 'push'
-      && github.repository_owner == '<name>'
-      && false
+      && github.repository_owner == 'gittiver'
 
     permissions:
       contents: write

@@ -33,7 +33,7 @@ struct game
 };
 
 struct settings {
-  std::string map_basedir;
+  std::string basedir;
 };
 
 struct server {
@@ -43,7 +43,9 @@ struct server {
   std::vector<game> games;
   std::vector<player> users;
   settings settings;
+  auto get_map(unsigned int map_id) -> map*;
+  auto get_mapfile(unsigned int map_id) -> std::string;
+  auto load() -> bool;
 private:
-  auto get_map(int map_id) -> map*;
-  auto get_mapfile(int map_id) -> std::string;
+  auto save() -> bool;
 };

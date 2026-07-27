@@ -1,9 +1,9 @@
 #pragma once
 
+#include <cstdint>
 #include <memory>
 #include <string>
 #include <vector>
-#include <cstdint>
 
 /**
  * @brief ASC game domain definitions and server
@@ -32,13 +32,15 @@ struct game
   struct map current_map;
 };
 
-struct settings {
+struct settings
+{
   std::string basedir;
 };
 
-struct server {
+struct server
+{
   explicit server(const std::string& basedir);
-  
+
   std::vector<map> maps;
   std::vector<game> games;
   std::vector<player> users;
@@ -46,6 +48,7 @@ struct server {
   auto get_map(unsigned int map_id) -> map*;
   auto get_mapfile(unsigned int map_id) -> std::string;
   auto load() -> bool;
+
 private:
   auto save() -> bool;
 };

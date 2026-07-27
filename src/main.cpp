@@ -1,42 +1,8 @@
 #include <string>
 
-#include "crow/app.h"
-#include "crow/json.h"
-// #include "crow/middleware.h"
-// #include <auth.hpp>
-// #include "bp_user_registration.hpp"
-
 #include "asc_server.hpp"
-
-auto error_response(int errorcode, const std::string& errortext)
-    -> crow::json::wvalue
-{
-  return crow::json::wvalue {
-      {"type", "error"},
-      {"error_code", std::to_string(errorcode)},
-      {"error_text", errortext},
-  };
-}
-
-static auto to_json(const map& map) -> crow::json::wvalue
-{
-  return crow::json::wvalue {
-      {"type", "map"},
-      {"id", map.id},
-      {"name", map.name},
-      {"filename", map.file_name},
-  };
-}
-
-template<class T>
-static auto list_to_json(const std::vector<T>& array) -> crow::json::wvalue
-{
-  crow::json::wvalue::list ret;
-  for (const auto& item : array) {
-    ret.push_back(to_json(item));
-  }
-  return {ret};
-}
+#include "crow/app.h"
+#include "json_encoding.hpp"
 
 auto main(int /*argc*/, char* /*argv*/[]) -> int
 {
@@ -111,6 +77,7 @@ auto main(int /*argc*/, char* /*argv*/[]) -> int
             crow::json::wvalue ret = list_to_json(server.maps);
             return ret;
           });
+
   CROW_ROUTE(app, "/maps/<uint>")
       .methods(crow::HTTPMethod::Get)(
           [&server](unsigned int map_id) -> crow::response
@@ -142,8 +109,12 @@ auto main(int /*argc*/, char* /*argv*/[]) -> int
 
   CROW_ROUTE(app, "/maps/<uint>")
       .methods(crow::HTTPMethod::Post)(
-          [](const crow::request& request, unsigned int map_id) -> crow::response
-          { return {crow::status::NOT_IMPLEMENTED, "post " + request.url}; });
+          [](const crow::request& request,
+             unsigned int map_id) -> crow::response
+          {
+            return {crow::status::NOT_IMPLEMENTED,
+                    "post " + request.url + " " + std::to_string(map_id)};
+          });
 
   app.port(18080).run();
 

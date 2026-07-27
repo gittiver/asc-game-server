@@ -30,14 +30,17 @@ CPMAddPackage(crow_auth
 
 add_library(
     asc-game-server_lib OBJECT
-        src/asc_server.cpp
+  src/asc_server.cpp
+  src/json_encoding.hpp src/json_encoding.cpp
 )
+
 
 target_include_directories(
     asc-game-server_lib ${warning_guard}
     PUBLIC
     "\$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/source>"
 )
+target_link_libraries(asc-game-server_lib PUBLIC lib-crow-auth Crow::Crow)
 
 target_compile_features(asc-game-server_lib PUBLIC cxx_std_20)
 
